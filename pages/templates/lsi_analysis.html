@@ -1,0 +1,70 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LSI Ανάλυση</title>
+<style>
+    body{
+        margin-left: 240px;
+        font-family: 'Georgia', serif;
+    }
+
+    button{
+        background-color: var(--brown-color);
+        color: white;
+        border-radius: 5px;
+        border: solid 1px;
+        height: 35px;
+    }
+    h1 {
+        color: #ca786d;
+        text-align: center;
+        margin-bottom: 10px; /* Add some space below the heading */
+    }
+    h2 {
+        color: #a96961;
+        text-align: left;
+        margin-bottom: 5px; /* Add some space below the heading */
+    }
+</style>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+    <div id="sidebar-placeholder" style="height: 270%;"></div>
+
+    <div class="main">
+        <h1 style="text-align: center;"><strong>ΑΝΑΛΥΣΗ ΘΕΜΑΤΙΚΩΝ ΠΕΡΙΟΧΩΝ ΟΜΙΛΙΩΝ ΜΕ ΒΑΣΗ ΤΟ LSI</strong></h1>
+        <br>
+        <p>Λαμβάνοντας υπόψη όλες τις ομιλίες, χρησιμοποιείται η τεχνική LSI, ώστε να εντοπιστούν
+            οι σημαντικότερες θεματικές περιοχές και να εκφραστεί η κάθε ομιλία ως διάνυσμα σε κάποιον
+            πολυδιάστατο χώρο.</p>
+    </div>
+
+    <div class="row" style="text-align: center;">
+        <a href="{% static 'pdf_docs/lsi_results.pdf' %}" target="_blank">Αποτελέσματα θεματικών ενοτήτων</a>
+    </div>
+
+    <div class="row">
+        <p>Μέσα από την εξέταση των συστατικών που παρήχθησαν από τη LSI, έγινε η αναγνώριση των σημαντικότερων λέξεων 
+            (χαρακτηριστικών) για κάθε θέμα, προσφέροντας μια επισκόπηση των κυριότερων θεματικών περιοχών που 
+            συζητήθηκαν στο Κοινοβούλιο. Εξάγαμε 10 θεματικές ενότητες και εμφανίσαμε τις 10 σημαντικότερες λέξεις ανά
+             θεματική ενότητα.</p>
+    </div>
+
+    <script>
+        // Load sidebar content using JavaScript
+        window.addEventListener('DOMContentLoaded', function() {
+            fetch('/sidebar')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('sidebar-placeholder').innerHTML = data;
+            });
+        });
+    </script>
+
+</body>
+</html> 

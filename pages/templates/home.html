@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ανάκτηση Πληροφορίας</title>
+<style>
+    /* Style adjustments for layout */
+    body {
+        display: flex; /* Use flexbox for layout */
+        margin: 0; /* Reset margin */
+        font-family: 'Georgia', serif;
+    }
+
+    .main {
+        flex: 1; /* Fill remaining space in the flex container */
+        padding: 20px; /* Add padding to the main content */
+        margin-left: 230px;
+    }
+    h1 {
+        color: #ca786d;
+        text-align: center;
+        margin-bottom: 10px; /* Add some space below the heading */
+    }
+
+    h4 {
+        color: #282f37;
+        text-align: center;
+        margin-bottom: 10px; /* Add some space below the heading */
+    }
+
+    a {
+        display: block; /* Make the link a block element */
+        text-align: center; /* Center-align the link */
+        margin: 0 auto; /* Center the link horizontally */
+        margin-bottom: 20px; /* Add some space below the link */
+        color: #7183b6;
+    }
+</style>
+</head>
+<body>
+  <div id="sidebar-placeholder"></div>
+  
+    <div class="main">
+        <h1 style="text-align: center;"><strong>ΑΝΑΚΤΗΣΗ ΠΛΗΡΟΦΟΡΙΑΣ 2023 - 2024</strong></h1>
+        <h4 style="text-align: center;">Ομιλίες Ελληνικού Κοινοβουλίου 1989-2020</h4>
+        <p>Η ιστοσελίδα αυτή αποτελεί υλοποίηση της εργασίας του μαθήματος "Ανάκτηση Πληροφορίας" που διεξάγεται στα
+          πλαίσια του προπτυχιακού προγράμματος σπουδών του τμήματος Πληροφορικής του Αριστοτελείου Πανεπιστημίου Θεσσαλονίκης.</p>
+          <p>
+            Για την σχεδίαση και υλοποίηση της εργασίας αυτής εφαρμόστηκαν τεχνικές Ανάκτησης Πληροφορίας στις ομιλίες της
+            Βουλής των Ελλήνων. Τα δεδομένα έχουν συγκεντρωθεί από τον ιστότοπο της Βουλής, καθώς οι ομιλίες
+            της Βουλής είναι διαθέσιμες στον οποιονδήποτε. Τα δεδομένα έχουν συγκεντρωθεί από το σύνδεσμο
+          </p>
+          <a href="https://www.hellenicparliament.gr/Praktika/Synedriaseis-Olomeleias" target="_blank" style="text-align: center;">https://www.hellenicparliament.gr/Praktika/Synedriaseis-Olomeleias</a>
+          <p>
+            Αυτό το σύνολο δεδομένων περιλαμβάνει 1.280.918 ομιλίες βουλευτών της Ελληνικής Βουλής με συνολικό
+            όγκο 2,30 GB, που εξήχθησαν από 5.355 αρχεία καταγραφής συνεδριάσεων της Βουλής. Εκτείνονται
+            χρονολογικά από τις αρχές του Ιουλίου 1989 έως τα τέλη Ιουλίου 2020. Το σύνολο των δεδομένων
+            αποτελείται από ένα αρχείο .csv σε κωδικοποίηση UTF-8 και περιλαμβάνει πολλές στήλες που σχετίζονται
+            με το μέλος, το κόμμα, την ημερομηνία ομιλίας κ.λπ.
+          </p>
+          <p>
+            Στόχος της εργασίας είναι η οργάνωση και η επεξεργασία των δεδομένων έτσι ώστε να παρέχεται η δυνατότητα εύρεσης
+            χρήσιμων πληροφοριών από τις ομιλίες αυτές.
+          </p>
+    </div>
+
+    <script>
+      // Load sidebar content using JavaScript
+      window.addEventListener('DOMContentLoaded', function() {
+          fetch('sidebar')
+              .then(response => response.text())
+              .then(data => {
+                  document.getElementById('sidebar-placeholder').innerHTML = data;
+              });
+      });
+  </script>
+</body>
+</html> 

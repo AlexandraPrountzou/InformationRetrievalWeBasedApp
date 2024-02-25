@@ -1,0 +1,234 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ανάλυση Suprise!</title>
+<style>
+    body{
+        margin-left: 240px;
+        font-family: 'Georgia', serif;
+    }
+
+    button{
+        background-color: var(--brown-color);
+        color: white;
+        border-radius: 5px;
+        border: solid 1px;
+        height: 35px;
+    }
+    h1 {
+        color: #ca786d;
+        text-align: center;
+        margin-bottom: 10px; /* Add some space below the heading */
+    }
+    a {
+        display: block; /* Make the link a block element */
+        text-align: center; /* Center-align the link */
+        margin: 0 auto; /* Center the link horizontally */
+        margin-bottom: 20px; /* Add some space below the link */
+        color: #7183b6;
+    }
+    /* Basic styles for tabs */
+    .tab {
+    display: none;
+    padding: 20px;
+    border-top: 2px solid transparent;
+    }
+
+    .tab-buttons {
+    overflow: hidden;
+    border-bottom: 2px solid #f1f1f1;
+    text-align: center; /* Center align the tab buttons */
+    }
+
+    .tab-button {
+    background-color: #f1f1f1;
+    color: black !important;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 10px 20px; /* Reduced padding */
+    transition: background-color 0.3s;
+    margin: 0 0.5px; /* Reduced margin */
+    }
+
+    .tab-button:hover {
+    background-color: #969797;
+    }
+
+    .tab-button.active {
+    background-color: #fff;
+    border: 2px solid #4d8382; /* Set border for active tab */
+    border-bottom: 3px solid #6fe1d0; /* Restore bottom border */
+    border-top: 1px solid #ccc; /* Add top border */
+    border-left: 1px solid #ccc; /* Add left border */
+    border-right: 1px solid #ccc; /* Add right border */
+    }
+    /* CSS for image gallery */
+    .gallery-container {
+        position: relative; /* Set container position to relative */
+        max-width: calc(100% - 260px); /* Adjust width to fit the available space */
+        margin: 0 auto; /* Center the container horizontally */
+        margin-top: 20px; /* Adjust top margin as needed */
+    }
+
+    .gallery {
+        display: flex;
+        justify-content: center; /* Center the images horizontally */
+        align-items: center; /* Center the images vertically */
+        gap: 10px;
+    }
+
+    .gallery img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        border-radius: 8px;
+    }
+    /* CSS for navigation buttons */
+    .prev, .prev1, .prev2, .prev3, .prev4, .next, .next1, .next2, .next3, .next4 {
+        position: absolute; /* Position buttons relative to their container */
+        top: 50%; /* Center vertically */
+        transform: translateY(-50%);
+        background-color: rgba(255, 255, 255, 0.5);
+        border: none;
+        color: black;
+        font-size: 18px;
+        cursor: pointer;
+        padding: 10px;
+        z-index: 1; /* Ensure buttons appear above images */
+    }
+
+    .prev {
+        left: -120px; /* Position previous button */
+    }
+
+    .next {
+        right: -135px; /* Position next button */
+    }
+</style>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div id="sidebar-placeholder"></div>
+  
+    <div class="main">
+        <h1 style="text-align: center;"><strong>Ανάλυση Κοινοβουλευτικών Ομιλιών με Χρήση Δικτύων και Μέτρων Κεντρικότητας</strong></h1>
+        <br>
+        <p>Σκοπός αυτής της ανάλυσης ήταν να διερευνήσουμε τις διασυνδέσεις μεταξύ των βουλευτών στο Ελληνικό Κοινοβούλιο με βάση τις 
+            ομοιότητες στο περιεχόμενο των ομιλιών τους. </p>
+        <p>Η χρήση δικτύων και μετρήσεων κεντρικότητας μπορεί να παρέχει ενδιαφέροντα εργαλεία για την ανάλυση δεδομένων και την κατανόηση πολύπλοκων διασυνδέσεων σε πολιτικά περιβάλλοντα. Η εφαρμογή αυτών των μεθόδων στις κοινοβουλευτικές ομιλίες μπορεί να αποκαλύψει πτυχές της κοινοβουλευτικής δραστηριότητας που δεν είναι 
+            προφανείς στο πρώτο βλέμμα και να παρέχει επιπλέον ενδείξεις για τις διασυνδέσεις μεταξύ των βουλευτών.</p>
+    </div>
+        
+        
+    <div class="row">        
+        <!-- Tab buttons -->
+        <div class="tab-buttons">
+            <button class="tab-button" onclick="openTab(event, 'tab1')">Αποτελέσματα ανάλυσης Κοινοβουλευτικών Ομιλιών</button>
+            <button class="tab-button" onclick="openTab(event, 'tab2')">Οπτικοποίηση Αποτελεσμάτων</button>
+        </div>
+        
+        <!-- Tab content -->
+        <div class="tab" id="tab1">
+            <a href="{% static 'pdf_docs/similarity_graph_results.pdf' %}" target="_blank">Αποτελέσματα Ανάλυσης Κοινοβουλευτικών Ομιλιών με Χρήση Δικτύων και Μέτρων Κεντρικότητας</a>
+            <p>Στα αποτελέσματα ανάλυσης κοινοβουλευτικών ομιλιών με χρήση δικτύων και μέτρων κεντρικότητας
+                μπορείτε αρχικά να βρείτε τους κόμβους (βουλευτές) και τις ακμές (ομοιότητα μεταξύ βουλευτών)
+                και στο τέλος του εγγράφου μπορείτε να δείτε τα μονοπάτια που σχηματίζονται μεταξύ των βουλευτών
+                οι οποίοι μεταξύ τους έχουν μικρότερη ομοιότητα από το threshold.
+            </p>
+        </div>
+        
+        <div class="tab" id="tab2">
+            <div class="gallery-container">
+                <div class="gallery" style="width: 100%; height: 50%;">
+                    <!-- Images will be dynamically added here -->
+                </div>
+            
+                <!-- Navigation buttons -->
+                <button class="prev">&#10094; Προηγούμενο</button>
+                <button class="next">Επόμενο &#10095;</button>
+            </div>
+        
+            <script>
+                window.addEventListener('DOMContentLoaded', () => {
+                    const gallery = document.querySelector('.gallery');
+                    let currentImageIndex = 0;
+                    
+                    // Fetch image names from the server
+                    fetch('/image_list_similarity_graph/') // Adjust URL path as necessary
+                        .then(response => response.json())
+                        .then(data => {
+                            const imageNames = data.images; // Get image names from response
+                            
+                            // Function to display the current image
+                            const displayCurrentImage = () => {
+                                gallery.innerHTML = ''; // Clear the gallery
+                                
+                                // Create and append the image element
+                                const img = document.createElement('img');
+                                img.src = `/static/similarity_graph/${imageNames[currentImageIndex]}`; // Adjust path as necessary
+                                gallery.appendChild(img);
+                            };
+    
+                            // Initialize display with the first image
+                            displayCurrentImage();
+                            
+                            // Event listeners for navigation buttons
+                            document.querySelector('.prev').addEventListener('click', () => {
+                                currentImageIndex = (currentImageIndex - 1 + imageNames.length) % imageNames.length;
+                                displayCurrentImage();
+                            });
+    
+                            document.querySelector('.next').addEventListener('click', () => {
+                                currentImageIndex = (currentImageIndex + 1) % imageNames.length;
+                                displayCurrentImage();
+                            });
+                        });
+                });
+            </script>
+        </div>
+        
+    </div>
+    <script>
+    // Function to switch between tabs
+    function openTab(event, tabName) {
+      var i, tabContent, tabButton;
+  
+      // Hide all tab content
+      tabContent = document.getElementsByClassName("tab");
+      for (i = 0; i < tabContent.length; i++) {
+        tabContent[i].style.display = "none";
+      }
+  
+      // Remove the 'active' class from all tab buttons
+      tabButton = document.getElementsByClassName("tab-button");
+      for (i = 0; i < tabButton.length; i++) {
+        tabButton[i].className = tabButton[i].className.replace(" active", "");
+      }
+  
+      // Show the selected tab content and mark the button as active
+      document.getElementById(tabName).style.display = "block";
+      event.currentTarget.className += " active";
+    }
+  
+    // Show the first tab by default
+    document.getElementById("tab1").style.display = "block";
+  </script>
+
+    <script>
+        // Load sidebar content using JavaScript
+        window.addEventListener('DOMContentLoaded', function() {
+            fetch('/sidebar')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('sidebar-placeholder').innerHTML = data;
+                });
+        });
+    </script>
+
+</body>
+</html> 

@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">   
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ανάλυση σε βάθος χρόνου</title>
+<style>
+    body{
+        margin-left: 240px;
+        font-family: 'Georgia', serif;
+    }
+
+    button{
+        background-color: var(--brown-color);
+        color: white;
+        border-radius: 5px;
+        border: solid 1px;
+        height: 35px;
+    }
+    h1 {
+        color: #ca786d;
+        text-align: center;
+        margin-bottom: 10px; /* Add some space below the heading */
+    }
+    /* Basic styles for tabs */
+    .tab {
+    display: none;
+    padding: 20px;
+    border-top: 2px solid transparent;
+    }
+
+    .tab-buttons {
+    overflow: hidden;
+    border-bottom: 2px solid #f1f1f1;
+    text-align: center; /* Center align the tab buttons */
+    }
+
+    .tab-button {
+    background-color: #f1f1f1;
+    color: black !important;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 10px 20px; /* Reduced padding */
+    transition: background-color 0.3s;
+    margin: 0 0.5px; /* Reduced margin */
+    }
+
+    .tab-button:hover {
+    background-color: #969797;
+    }
+
+    .tab-button.active {
+    background-color: #fff;
+    border: 2px solid #4d8382; /* Set border for active tab */
+    border-bottom: 3px solid #6fe1d0; /* Restore bottom border */
+    border-top: 1px solid #ccc; /* Add top border */
+    border-left: 1px solid #ccc; /* Add left border */
+    border-right: 1px solid #ccc; /* Add right border */
+    }
+    /* CSS for image gallery */
+    .gallery-container {
+        position: relative; /* Set container position to relative */
+        max-width: calc(100% - 260px); /* Adjust width to fit the available space */
+        margin: 0 auto; /* Center the container horizontally */
+        margin-top: 20px; /* Adjust top margin as needed */
+    }
+
+    .gallery {
+        display: flex;
+        justify-content: center; /* Center the images horizontally */
+        align-items: center; /* Center the images vertically */
+        gap: 10px;
+    }
+
+    .gallery img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        border-radius: 8px;
+    }
+    /* CSS for navigation buttons */
+    .prev, .prev1, .prev2, .prev3, .prev4, .next, .next1, .next2, .next3, .next4 {
+        position: absolute; /* Position buttons relative to their container */
+        top: 50%; /* Center vertically */
+        transform: translateY(-50%);
+        background-color: rgba(255, 255, 255, 0.5);
+        border: none;
+        color: black;
+        font-size: 18px;
+        cursor: pointer;
+        padding: 10px;
+        z-index: 1; /* Ensure buttons appear above images */
+    }
+
+    .prev, .prev1, .prev2, .prev3, .prev4 {
+        left: -120px; /* Position previous button */
+    }
+
+    .next, .next1, .next2, .next3, .next4 {
+        right: -135px; /* Position next button */
+    }
+</style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div id="sidebar-placeholder"></div>
+  
+    <div class="main">
+        <h1 style="text-align: center;"><strong>ΑΝΑΛΥΣΗ ΣΕ ΒΑΘΟΣ ΧΡΟΝΟΥ</strong></h1>
+        <br>
+        <p>Εύρεση των σημαντικότερων λέξεων-κλειδιά(keywords) και το πώς αυτές αλλάζουν στο χρόνο.</p>
+    </div>
+
+    <div class="row">        
+        <!-- Tab buttons -->
+        <div class="tab-buttons">
+            <button class="tab-button" onclick="openTab(event, 'tab1')">Ανά βουλευτή</button>
+            <button class="tab-button" onclick="openTab(event, 'tab2')">Ανά κόμμα</button>
+            <button class="tab-button" onclick="openTab(event, 'tab3')">Ανά βουλευτή σε βάθος χρόνου</button>
+            <button class="tab-button" onclick="openTab(event, 'tab4')">Ανά κόμμα σε βάθος χρόνου</button>
+        </div>
+        
+        <!-- Tab content -->
+        <div class="tab" id="tab1">
+            <div class="gallery-container">
+                <div class="gallery">
+                    <!-- Images will be dynamically added here -->
+                </div>
+            
+                <!-- Navigation buttons -->
+                <button class="prev">&#10094; Προηγούμενο</button>
+                <button class="next">Επόμενο &#10095;</button>
+            </div>
+        
+            <script>
+                window.addEventListener('DOMContentLoaded', () => {
+                    const gallery = document.querySelector('.gallery');
+                    let currentImageIndex = 0;
+                    
+                    // Fetch image names from the server
+                    fetch('/image_list_per_member/') // Adjust URL path as necessary
+                        .then(response => response.json())
+                        .then(data => {
+                            const imageNames = data.images; // Get image names from response
+                            
+                            // Function to display the current image
+                            const displayCurrentImage = () => {
+                                gallery.innerHTML = ''; // Clear the gallery
+                                
+                                // Create and append the image element
+                                const img = document.createElement('img');
+                                img.src = `/static/analysis_per_member_of_parliament/${imageNames[currentImageIndex]}`; // Adjust path as necessary
+                                gallery.appendChild(img);
+                            };
+    
+                            // Initialize display with the first image
+                            displayCurrentImage();
+                            
+                            // Event listeners for navigation buttons
+                            document.querySelector('.prev').addEventListener('click', () => {
+                                currentImageIndex = (currentImageIndex - 1 + imageNames.length) % imageNames.length;
+                                displayCurrentImage();
+                            });
+    
+                            document.querySelector('.next').addEventListener('click', () => {
+                                currentImageIndex = (currentImageIndex + 1) % imageNames.length;
+                                displayCurrentImage();
+                            });
+                        });
+                });
+            </script>
+        </div>
+        
+        <div class="tab" id="tab2">
+            <div class="gallery-container">
+                <div class="gallery2">
+                    <!-- Images will be dynamically added here -->
+                </div>
+            
+                <!-- Navigation buttons -->
+                <button class="prev2">&#10094; Προηγούμενο</button>
+                <button class="next2">Επόμενο &#10095;</button>
+            </div>
+        
+            <script>
+                window.addEventListener('DOMContentLoaded', () => {
+                    const gallery2 = document.querySelector('.gallery2');
+                    let currentImageIndex2 = 0;
+                    
+                    // Fetch image names from the server
+                    fetch('/image_list_per_party/') // Adjust URL path as necessary
+                        .then(response => response.json())
+                        .then(data => {
+                            const imageNames2 = data.images; // Get image names from response
+                            
+                            // Function to display the current image
+                            const displayCurrentImage2 = () => {
+                                gallery2.innerHTML = ''; // Clear the gallery2
+                                
+                                // Create and append the image element
+                                const img2 = document.createElement('img');
+                                img2.src = `/static/analysis_per_party/${imageNames2[currentImageIndex2]}`; // Adjust path as necessary
+                                gallery2.appendChild(img2);
+                            };
+    
+                            // Initialize display with the first image
+                            displayCurrentImage2();
+                            
+                            // Event listeners for navigation buttons
+                            document.querySelector('.prev2').addEventListener('click', () => {
+                                currentImageIndex2 = (currentImageIndex2 - 1 + imageNames2.length) % imageNames2.length;
+                                displayCurrentImage2();
+                            });
+    
+                            document.querySelector('.next2').addEventListener('click', () => {
+                                currentImageIndex2 = (currentImageIndex2 + 1) % imageNames2.length;
+                                displayCurrentImage2();
+                            });
+                        });
+                });
+            </script>
+        </div>
+        
+        <div class="tab" id="tab3">
+            <div class="gallery-container">
+                <div class="gallery3">
+                    <!-- Images will be dynamically added here -->
+                </div>
+            
+                <!-- Navigation buttons -->
+                <button class="prev3">&#10094; Προηγούμενο</button>
+                <button class="next3">Επόμενο &#10095;</button>
+            </div>
+        
+            <script>
+                window.addEventListener('DOMContentLoaded', () => {
+                    const gallery3 = document.querySelector('.gallery3');
+                    let currentImageIndex3 = 0;
+                    
+                    // Fetch image names from the server
+                    fetch('/image_list_per_member/') // Adjust URL path as necessary
+                        .then(response => response.json())
+                        .then(data => {
+                            const imageNames3 = data.images; // Get image names from response
+                            
+                            // Function to display the current image
+                            const displayCurrentImage3 = () => {
+                                gallery3.innerHTML = ''; // Clear the gallery3
+                                
+                                // Create and append the image element
+                                const img3 = document.createElement('img');
+                                img3.src = `/static/in_time_analysis_per_member/${imageNames3[currentImageIndex3]}`; // Adjust path as necessary
+                                gallery3.appendChild(img3);
+                            };
+    
+                            // Initialize display with the first image
+                            displayCurrentImage3();
+                            
+                            // Event listeners for navigation buttons
+                            document.querySelector('.prev3').addEventListener('click', () => {
+                                currentImageIndex3 = (currentImageIndex3 - 1 + imageNames3.length) % imageNames3.length;
+                                displayCurrentImage3();
+                            });
+    
+                            document.querySelector('.next3').addEventListener('click', () => {
+                                currentImageIndex3 = (currentImageIndex3 + 1) % imageNames3.length;
+                                displayCurrentImage3();
+                            });
+                        });
+                });
+            </script>
+        </div>
+
+        <div class="tab" id="tab4">
+            <div class="gallery-container">
+                <div class="gallery4">
+                    <!-- Images will be dynamically added here -->
+                </div>
+            
+                <!-- Navigation buttons -->
+                <button class="prev4">&#10094; Προηγούμενο</button>
+                <button class="next4">Επόμενο &#10095;</button>
+            </div>
+        
+            <script>
+                window.addEventListener('DOMContentLoaded', () => {
+                    const gallery4 = document.querySelector('.gallery4');
+                    let currentImageIndex4 = 0;
+                    
+                    // Fetch image names from the server
+                    fetch('/image_list_in_time_per_party/') // Adjust URL path as necessary
+                        .then(response => response.json())
+                        .then(data => {
+                            const imageNames4 = data.images; // Get image names from response
+                            
+                            // Function to display the current image
+                            const displayCurrentImage4 = () => {
+                                gallery4.innerHTML = ''; // Clear the gallery4
+                                
+                                // Create and append the image element
+                                const img4 = document.createElement('img');
+                                img4.src = `/static/in_time_analysis_per_party/${imageNames4[currentImageIndex4]}`; // Adjust path as necessary
+                                gallery4.appendChild(img4);
+                            };
+    
+                            // Initialize display with the first image
+                            displayCurrentImage4();
+                            
+                            // Event listeners for navigation buttons
+                            document.querySelector('.prev4').addEventListener('click', () => {
+                                currentImageIndex4 = (currentImageIndex4 - 1 + imageNames4.length) % imageNames4.length;
+                                displayCurrentImage4();
+                            });
+    
+                            document.querySelector('.next4').addEventListener('click', () => {
+                                currentImageIndex4 = (currentImageIndex4 + 1) % imageNames4.length;
+                                displayCurrentImage4();
+                            });
+                        });
+                });
+            </script>
+        </div>
+        
+    </div>
+    <script>
+    // Function to switch between tabs
+    function openTab(event, tabName) {
+      var i, tabContent, tabButton;
+  
+      // Hide all tab content
+      tabContent = document.getElementsByClassName("tab");
+      for (i = 0; i < tabContent.length; i++) {
+        tabContent[i].style.display = "none";
+      }
+  
+      // Remove the 'active' class from all tab buttons
+      tabButton = document.getElementsByClassName("tab-button");
+      for (i = 0; i < tabButton.length; i++) {
+        tabButton[i].className = tabButton[i].className.replace(" active", "");
+      }
+  
+      // Show the selected tab content and mark the button as active
+      document.getElementById(tabName).style.display = "block";
+      event.currentTarget.className += " active";
+    }
+  
+    // Show the first tab by default
+    document.getElementById("tab1").style.display = "block";
+  </script>
+  
+
+    <script>
+        // Load sidebar content using JavaScript
+        window.addEventListener('DOMContentLoaded', function() {
+            fetch('/sidebar')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('sidebar-placeholder').innerHTML = data;
+                });
+        });
+    </script>
+
+</body>
+</html>

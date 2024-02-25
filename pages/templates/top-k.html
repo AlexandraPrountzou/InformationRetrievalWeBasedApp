@@ -1,0 +1,246 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Top-k Ανάλυση</title>
+<style>
+    body{
+        margin-left: 240px;
+        font-family: 'Georgia', serif;
+    }
+    button{
+        background-color: var(--brown-color);
+        color: white;
+        border-radius: 5px;
+        border: solid 1px;
+        height: 35px;
+    }
+    h1 {
+        color: #ca786d;
+        text-align: center;
+        margin-bottom: 10px; /* Add some space below the heading */
+    }
+    a {
+        display: block; /* Make the link a block element */
+        text-align: center; /* Center-align the link */
+        margin: 0 auto; /* Center the link horizontally */
+        margin-bottom: 20px; /* Add some space below the link */
+        color: #7183b6;
+    }
+    /* Basic styles for tabs */
+    .tab {
+    display: none;
+    padding: 20px;
+    border-top: 2px solid transparent;
+    }
+
+    .tab-buttons {
+    overflow: hidden;
+    border-bottom: 2px solid #f1f1f1;
+    text-align: center; /* Center align the tab buttons */
+    }
+
+    .tab-button {
+    background-color: #f1f1f1;
+    color: black !important;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 10px 20px; /* Reduced padding */
+    transition: background-color 0.3s;
+    margin: 0 0.5px; /* Reduced margin */
+    }
+
+    .tab-button:hover {
+    background-color: #969797;
+    }
+
+    .tab-button.active {
+    background-color: #fff;
+    border: 2px solid #4d8382; /* Set border for active tab */
+    border-bottom: 3px solid #6fe1d0; /* Restore bottom border */
+    border-top: 1px solid #ccc; /* Add top border */
+    border-left: 1px solid #ccc; /* Add left border */
+    border-right: 1px solid #ccc; /* Add right border */
+    }
+    /* CSS for image gallery */
+    .gallery-container {
+        position: relative; /* Set container position to relative */
+        max-width: calc(100% - 260px); /* Adjust width to fit the available space */
+        margin: 0 auto; /* Center the container horizontally */
+        margin-top: 20px; /* Adjust top margin as needed */
+    }
+
+    .gallery {
+        display: flex;
+        justify-content: center; /* Center the images horizontally */
+        align-items: center; /* Center the images vertically */
+        gap: 10px;
+    }
+
+    .gallery img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        border-radius: 8px;
+    }
+    /* CSS for navigation buttons */
+    .prev, .next {
+        position: absolute; /* Position buttons relative to their container */
+        top: 50%; /* Center vertically */
+        transform: translateY(-50%);
+        background-color: rgba(255, 255, 255, 0.5);
+        border: none;
+        color: black;
+        font-size: 18px;
+        cursor: pointer;
+        padding: 10px;
+        z-index: 1; /* Ensure buttons appear above images */
+    }
+
+    .prev {
+        left: 10px; /* Position previous button */
+    }
+
+    .next {
+        right: 10px; /* Position next button */
+    }
+    /* Table styling */
+    table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            border: 2px solid #dcdcdc; /* Single-line border */
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Shadow effect */
+        }
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+        }
+        th {
+            background-color: #4d8382; /* Transparent orange background for table header */
+            color: #fff;
+            border-bottom: 2px solid #dcdcdc; /* Single-line border for table header */
+        }
+        tr:nth-child(even) {
+            background-color: #b1d5d7; /* Grey background for even rows */
+        }
+        tr:hover {
+            background-color: #ccc; /* Light grey background on hover */
+            color: white;
+        }
+</style>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div id="sidebar-placeholder"></div>
+  
+    <div class="main">
+        <h1 style="text-align: center;"><strong>TOP K ΖΕΥΓΗ ΟΜΟΙΟΤΗΤΩΝ</strong></h1>
+        <br>
+        <p>Δεδομένων όλων των ομιλιών, ανιχνεύονται ομοιότητες ανά ζεύγη μεταξύ των μελών του
+            κοινοβουλίου. Συγκεκριμένα, γίνεται εξαγωγή ενός διανύσματος χαρακτηριστικών
+            για κάθε μέλος του κοινοβουλίου και στη συνέχεια εκτελέσουμε μία μέθοδο εύρεσης ομοιοτήτων ανά ζεύγη 
+            για να μπορέσει να ανιχνευθούν τα top-k ζεύγη με τον υψηλότερο βαθμό ομοιότητας 
+            (όπου k είναι μια παράμετρος).</p>
+    </div>
+
+    <div class="row">        
+        <!-- Tab buttons -->
+        <div class="tab-buttons">
+            <button class="tab-button" onclick="openTab(event, 'tab1')">Αποτελέσματα Ανάλυσης top K</button>
+            <button class="tab-button" onclick="openTab(event, 'tab2')">Clusters</button>
+        </div>
+        
+        <!-- Tab content -->
+        <div class="tab" id="tab1">
+            <a href="{% static 'pdf_docs/topK_results.pdf' %}" target="_blank">Αποτελέσματα Ανάλυσης Top-K για κάθε βουλευτή</a>
+        </div>
+        
+        <div class="tab" id="tab2">
+            <div class="row">
+                <table border="1">
+                    <thead>
+                        <tr>
+                            <th>Cluster</th>
+                            <th>Αριθμός Ομιλιών</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body">
+                        <!-- Table rows will be dynamically added here -->
+                    </tbody>
+                </table>
+            
+                <script>
+                    // JavaScript code to populate the table
+                    var data = [
+                        { cluster: 1, noOfSpeeches: 372 },
+                        { cluster: 2, noOfSpeeches: 16352 },
+                        { cluster: 3, noOfSpeeches: 7617 },
+                        { cluster: 4, noOfSpeeches: 710071 },
+                        { cluster: 5, noOfSpeeches: 10190 },
+                        { cluster: 6, noOfSpeeches: 13396 },
+                        { cluster: 7, noOfSpeeches: 207143 },
+                        { cluster: 8, noOfSpeeches: 25669 },
+                        { cluster: 9, noOfSpeeches: 2600 },
+                        { cluster: 10, noOfSpeeches: 8554 },
+                    ];
+            
+                    var tableBody = document.getElementById('table-body');
+            
+                    data.forEach(function(item) {
+                        var row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${item.cluster}</td>
+                            <td>${item.noOfSpeeches}</td>
+                        `;
+                        tableBody.appendChild(row);
+                    });
+                </script>
+            </div>
+        </div>
+        
+    </div>
+    <script>
+    // Function to switch between tabs
+    function openTab(event, tabName) {
+      var i, tabContent, tabButton;
+  
+      // Hide all tab content
+      tabContent = document.getElementsByClassName("tab");
+      for (i = 0; i < tabContent.length; i++) {
+        tabContent[i].style.display = "none";
+      }
+  
+      // Remove the 'active' class from all tab buttons
+      tabButton = document.getElementsByClassName("tab-button");
+      for (i = 0; i < tabButton.length; i++) {
+        tabButton[i].className = tabButton[i].className.replace(" active", "");
+      }
+  
+      // Show the selected tab content and mark the button as active
+      document.getElementById(tabName).style.display = "block";
+      event.currentTarget.className += " active";
+    }
+  
+    // Show the first tab by default
+    document.getElementById("tab1").style.display = "block";
+  </script>
+
+    <script>
+        // Load sidebar content using JavaScript
+        window.addEventListener('DOMContentLoaded', function() {
+            fetch('/sidebar')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('sidebar-placeholder').innerHTML = data;
+                });
+        });
+    </script>
+
+</body>
+</html>
